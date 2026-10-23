@@ -1,0 +1,19 @@
+{
+  "recorded_from": "lscr.io/linuxserver/radarr@sha256:c984533510abe0219a70e80d15bd0d212b7df21baa0913759c4ce6cc9092240b",
+  "note": "A change to that client spoken to as the case names it: refused before Radarr is asked.",
+  "request": {
+    "method": "POST",
+    "path": "/lemonfiber/library.curate/v1/update_download_client",
+    "accept": "application/json"
+  },
+  "response": {
+    "status": 500,
+    "headers": {
+      "content-type": "application/problem+json"
+    },
+    "json": {
+      "type": "unsupported",
+      "detail": "it files no download client spoken to as conformance"
+    }
+  }
+}
