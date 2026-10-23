@@ -1,19 +1,16 @@
 {
   "recorded_from": "lscr.io/linuxserver/radarr@sha256:c984533510abe0219a70e80d15bd0d212b7df21baa0913759c4ce6cc9092240b",
-  "note": "The series it holds, which a curator of films does not hold: refused.",
+  "note": "The films a fresh Radarr holds, for carrying elsewhere: none.",
   "request": {
     "method": "POST",
     "path": "/lemonfiber/library.curate/v1/records",
     "accept": "application/json"
   },
   "response": {
-    "status": 500,
+    "status": 200,
     "headers": {
-      "content-type": "application/problem+json"
+      "content-type": "application/json"
     },
-    "json": {
-      "type": "unsupported",
-      "detail": "it holds no series"
-    }
+    "json": []
   }
 }
