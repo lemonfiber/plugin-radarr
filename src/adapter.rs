@@ -1,5 +1,6 @@
 //! What this adapter says it is, and the kit that serves its contract.
 
+use std::path::PathBuf;
 use std::sync::Arc;
 
 use adapter_kit_servarr::client::Servarr;
@@ -55,15 +56,17 @@ pub fn radarr(http: Arc<dyn Http>, base: impl Into<String>, held: Arc<dyn Holdin
     )
 }
 
-/// The contract, served from `radarr` under `key`, ready while Radarr answers.
+/// The contract, served from `radarr` under `key` and to the request gate under each key
+/// the core wrote for it beside `configuration`, ready while Radarr answers.
 #[must_use]
-pub fn kit(key: String, radarr: Arc<Curator>) -> Kit {
+pub fn kit(key: String, configuration: impl Into<PathBuf>, radarr: Arc<Curator>) -> Kit {
     let asked = Arc::clone(&radarr);
     let ready: Readiness = Arc::new(move || {
         let asked = Arc::clone(&asked);
         Box::pin(async move { asked.servarr().answers().await })
     });
     Kit::new(key, about())
+        .asked_by_the_gate(configuration)
         .ready_when(ready)
         .serving(library::curate::served(radarr))
 }
