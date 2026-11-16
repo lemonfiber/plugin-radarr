@@ -20,8 +20,7 @@ pub const UPSTREAM: &str = "Radarr";
 /// The Radarr release this adapter's recordings were taken from.
 pub const RELEASE: &str = "5.28.0.10274-ls286";
 
-/// The digest of the image that release's recordings were taken from.
-pub const DIGEST: &str = "sha256:c984533510abe0219a70e80d15bd0d212b7df21baa0913759c4ce6cc9092240b";
+include!(concat!(env!("OUT_DIR"), "/fronted.rs"));
 
 /// What every failure is blamed on.
 pub const SERVICE: &str = "radarr";
