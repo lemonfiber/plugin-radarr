@@ -17,9 +17,6 @@ pub const ADDRESS: &str = "http://radarr:7878";
 /// The upstream this adapter fronts, as its project names itself.
 pub const UPSTREAM: &str = "Radarr";
 
-/// The Radarr release this adapter's recordings were taken from.
-pub const RELEASE: &str = "5.28.0.10274-ls286";
-
 include!(concat!(env!("OUT_DIR"), "/fronted.rs"));
 
 /// What every failure is blamed on.
