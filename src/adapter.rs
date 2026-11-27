@@ -8,7 +8,7 @@ use adapter_kit_servarr::curator::{Curator, Files, NoMusic};
 use lemonfiber_adapter_kit::credential::Holding;
 use lemonfiber_adapter_kit::{Kit, Readiness};
 use lemonfiber_contract::adapter::{About, Release};
-use lemonfiber_contract::capabilities::library;
+use lemonfiber_contract::capabilities::{indexer, library};
 use lemonfiber_ports::http::Http;
 
 /// Where Radarr answers, by its service id and the port it listens on.
@@ -25,14 +25,14 @@ pub const SERVICE: &str = "radarr";
 /// The version of Radarr's API this adapter speaks.
 pub const API_VERSION: u32 = 3;
 
-/// What this adapter says it is: the contract it speaks and the release it supports.
+/// What this adapter says it is: the contracts it speaks and the release it supports.
 #[must_use]
 pub fn about() -> About {
     About {
-        speaks: vec![lemonfiber_contract::spoken(
-            library::curate::CAPABILITY,
-            library::curate::MAJOR,
-        )],
+        speaks: vec![
+            lemonfiber_contract::spoken(indexer::pull::CAPABILITY, indexer::pull::MAJOR),
+            lemonfiber_contract::spoken(library::curate::CAPABILITY, library::curate::MAJOR),
+        ],
         upstream: UPSTREAM.to_owned(),
         releases: vec![Release {
             version: RELEASE.to_owned(),
@@ -52,7 +52,7 @@ pub fn radarr(http: Arc<dyn Http>, base: impl Into<String>, held: Arc<dyn Holdin
     )
 }
 
-/// The contract, served from `radarr` under `key` and to the request gate under each key
+/// The contracts, served from `radarr` under `key` and to the request gate under each key
 /// the core wrote for it beside `configuration`, ready while Radarr answers.
 #[must_use]
 pub fn kit(key: String, configuration: impl Into<PathBuf>, radarr: Arc<Curator>) -> Kit {
@@ -64,6 +64,7 @@ pub fn kit(key: String, configuration: impl Into<PathBuf>, radarr: Arc<Curator>)
     Kit::new(key, about())
         .asked_by_the_gate(configuration)
         .ready_when(ready)
+        .serving(indexer::pull::served(Arc::clone(&radarr)))
         .serving(library::curate::served(radarr))
 }
 
